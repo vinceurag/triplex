@@ -4,7 +4,7 @@ defmodule Triplex.Mixfile do
   def project do
     [
       app: :triplex,
-      version: "1.1.2",
+      version: "1.1.3",
       elixir: "~> 1.4",
 
       description: description(),
@@ -57,6 +57,7 @@ defmodule Triplex.Mixfile do
       {:inch_ex, only: :docs},
 
       {:excoveralls, "~> 0.6", only: :test},
+      {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false}
     ]
   end
 
