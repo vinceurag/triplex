@@ -20,7 +20,6 @@ defmodule Triplex do
   return the prefixed one.
   """
 
-  import Mix.Ecto, only: [source_repo_priv: 1]
   alias Ecto.Adapters.SQL
   alias Ecto.Migrator
   alias Postgrex.Error, as: PGError
@@ -126,7 +125,7 @@ defmodule Triplex do
     else
       sql = "DROP SCHEMA \"#{to_prefix(tenant)}\" CASCADE"
       case SQL.query(repo, sql, []) do
-        {:ok, _} -> 
+        {:ok, _} ->
           {:ok, tenant}
         {:error, e} ->
           {:error, PGError.message(e)}
@@ -261,5 +260,11 @@ defmodule Triplex do
     You cannot create the schema because #{inspect(tenant)} is a reserved
     tenant
     """
+  end
+
+  def source_repo_priv(repo) do
+    priv = repo.config()[:priv] || "priv/#{repo |> Module.split |> List.last |> Macro.underscore}"
+    app = Keyword.fetch!(repo.config(), :otp_app)
+    Path.join(Mix.Project.deps_paths[app] || File.cwd!, priv)
   end
 end
